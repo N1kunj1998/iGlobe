@@ -1,0 +1,61 @@
+version: '3.3'
+
+services:
+  mysqldb:
+    image: mysql:latest
+    container_name: mysqldb
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=iiitb-handshake
+    ports:
+      - "3307:3306"
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - iglobe_network
+
+  fe_container:
+    image: nikunj1998/iglobe-frontend:latest
+    container_name: iglobe_frontend
+    build: /home/keerthi/Desktop/2ndSem/SPE/MajorProject/IIITB_CMS_FE/.
+    ports:
+      - "4300:80"
+    links:
+      - be_container
+    networks:
+      - cms_network
+
+  be_container:
+    image: keerthisree/cms_be_img:latest
+    depends_on:
+      - mysqldb
+    container_name: be_container
+    build: .
+    expose:
+      - "8050"
+    restart: on-failure
+    env_file: .env
+    ports:
+      - "8050:8050"
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url"  : "jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false",
+        "spring.datasource.username" : "$MYSQLDB_USER",
+        "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
+        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5InnoDBDialect",
+        "spring.jpa.hibernate.ddl-auto" : "update"
+      }'
+    volumes:
+      - .m2:/root/.m2
+    networks:
+      - cms_network
+    stdin_open: true
+    tty: true
+volumes:
+ db:
+networks:
+  iglobe_network:
+    driver: bridge
+
