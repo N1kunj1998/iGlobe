@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+    stages {
+        stage('Git Clone') {
+            steps {
+    			git branch: 'master' ,
+    			url: 'https://github.com/N1kunj1998/iGlobe.git'
+            }
+        }
+        stage('Maven Build') {
+            steps {
+            	sh'cd ./Iiitb-Handshake-Backend'
+                sh 'mvn clean install'
+            }
+        }
+    }
+}
