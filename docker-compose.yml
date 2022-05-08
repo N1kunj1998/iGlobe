@@ -11,7 +11,7 @@ services:
   iglobe-backend:
     # container_name: spring-backend
     image: iglobe-backend
-    restart: always
+    restart: on-failure:5
     build: ./Iiitb-Handshake-Backend
     ports:
       - 8082:8082
