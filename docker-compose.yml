@@ -27,7 +27,7 @@ services:
     container_name: mysqldb
     image: mysql
     volumes:
-      - /home/nikunj/Documents/iiitb-handshake/db:/var/lib/mysql
+      - ./db:/var/lib/mysql
     ports:
       - 3307:3306
     environment:
