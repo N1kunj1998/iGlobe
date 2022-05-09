@@ -26,6 +26,11 @@ public class FileUploadHelper {
     public boolean uploadFile(MultipartFile multipartFile, String key) {
         boolean flag = false;
 
+        File file  = new File(UPLOAD_DIR);
+        if(!file.exists()){
+            file.mkdir();
+        }
+
         try {
             Files.copy(multipartFile.getInputStream(), Paths.get(this.UPLOAD_DIR + File.separator + key +multipartFile.getOriginalFilename()), new CopyOption[]{StandardCopyOption.REPLACE_EXISTING});
             flag = true;
