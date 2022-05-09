@@ -21,15 +21,16 @@ public class FileUploadHelper {
     public final String UPLOAD_DIR = (new ClassPathResource("static/image/")).getFile().getAbsolutePath();
 //    public final String UPLOAD_DIR = "/home/nikunj/Documents/iiitb-handshake/Iiitb-Handshake-Backend/src/main/resources/static/image";
     public FileUploadHelper() throws IOException {
+        File file  = new File(UPLOAD_DIR);
+        if(!file.exists()){
+            file.mkdir();
+        }
     }
 
     public boolean uploadFile(MultipartFile multipartFile, String key) {
         boolean flag = false;
 
-        File file  = new File(UPLOAD_DIR);
-        if(!file.exists()){
-            file.mkdir();
-        }
+
 
         try {
             Files.copy(multipartFile.getInputStream(), Paths.get(this.UPLOAD_DIR + File.separator + key +multipartFile.getOriginalFilename()), new CopyOption[]{StandardCopyOption.REPLACE_EXISTING});
