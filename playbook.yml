@@ -1,6 +1,6 @@
 ---
 - name: "pull images and start docker compose"
-  hosts: all
+  hosts: "127.0.0.1"
   tasks:
     - name: "Pull docker images"
       command: "docker-compose -f docker-compose.yml pull"
