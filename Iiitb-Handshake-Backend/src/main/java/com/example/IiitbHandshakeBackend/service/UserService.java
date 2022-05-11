@@ -15,6 +15,10 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    public UserService(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
+
     public User addUser(User user){
         try {
             if(user.getRole() == null) return null;

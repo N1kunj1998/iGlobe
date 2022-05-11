@@ -9,7 +9,9 @@ import com.example.IiitbHandshakeBackend.repo.SellRepo;
 import com.example.IiitbHandshakeBackend.repo.RoomRepo;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +24,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @CrossOrigin("*")
 @RestController
 public class FileUploadController {
 
-    public final String UPLOAD_DIR = (new ClassPathResource("static/image/")).getFile().getAbsolutePath();
-
+    //public final String UPLOAD_DIR = (new ClassPathResource("static/image")).getFile().getAbsolutePath();
+    public Path UPLOAD_DIR = Paths.get("").toAbsolutePath();
+//    @Value("classpath:/static/image/")
+//    public Resource UPLOAD_DIR;
 
 
     @Autowired
@@ -44,7 +50,7 @@ public class FileUploadController {
     private RoomRepo roomRepo;
 
     public FileUploadController() throws IOException{
-
+        System.out.println(UPLOAD_DIR);
     }
 
     @PostMapping({"/upload-file/{key}"})

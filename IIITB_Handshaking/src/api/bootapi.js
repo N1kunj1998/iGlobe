@@ -1,2 +1,2 @@
-const base_url = "https://00c2-119-161-98-68.in.ngrok.io";
+const base_url = "http://localhost:8082";
 export default base_url;
