@@ -7,10 +7,42 @@ import StudentHomePage from './StudentHomePage';
 import base_url from "./api/bootapi";
 import axios from "axios";
 import { useState } from "react";
-
+import LostthingsShow
+ from "./LostthingShow";
+ import LostProduct from "./LostProduct";
 
 
 function Lostandfound(){
+
+
+  const [userdata,setuser]=useState({});
+  const handleform_donate=(e)=>{
+  
+    postdatatoserver(userdata);
+    e.preventDefault();
+  
+   
+  
+  };
+  const postdatatoserver = async (data)=>{
+    console.log(userdata)
+    
+    await axios.post(`${base_url}/lost/addItem` ,data).then(
+      (response)=>{
+          console.log(response);
+          console.log("success");
+      
+        
+      },
+      (error)=>{
+          console.log(error);
+          console.log("error");
+      }
+    )
+   
+  };
+
+
 return(<div>
     <Container/>
    
@@ -18,7 +50,6 @@ return(<div>
 
 
 <Col> <StudentHomePage /></Col>
-<br></br>
 <Col>
 <CardBody>
      <Card className="text-center">
@@ -27,12 +58,40 @@ return(<div>
     </h8>
 
      </Card>
+     
    </CardBody>
 </Col>
+
+<Form onSubmit={handleform_donate}>
+  <FormGroup>
+   
+     Found Product Name
+   
+    <Input
+      id="product"
+      name="email"
+      placeholder="product"
+      type="text"
+      onfocus="this.value=''"
+      onChange={(e)=>{
+        setuser({...userdata,productname: e.target.value})
+      }}
+    />
+    </FormGroup>
+    <Button variant="contained" size="medium" onClick={handleform_donate}>  Submit</Button>
+    </Form>
+
+
+
+
 <Col >
-<a href="/found" className="btn btn-success" style={{marginTop:"10px"}} data-toggle="modal" data-target="#showmoreModal">Found</a>
+
 <p>List of the items that has been found.. please collect the items from reception</p>
 </Col>
+<Card>
+  <LostthingsShow />
+</Card>
+
 
 </div>)
 };
