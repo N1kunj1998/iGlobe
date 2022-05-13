@@ -1,4 +1,11 @@
 pipeline {
+    environment {
+        imagename_frontend = "nikunj1998/iglobe-frontend:latest"
+        imagename_app = "nikunj1998/iglobe-backend:latest"
+        dockerImg_frontend=''
+        dockerImg_app=''
+        registryCredential = 'dockerhub'
+    }
     agent any
     stages {
         stage('Git Clone') {
@@ -7,11 +14,54 @@ pipeline {
     			url: 'https://github.com/N1kunj1998/iGlobe.git'
             }
         }
-        stage('Maven Build') {
+        stage('Build frontend image') {
+                 steps {
+                     dir('IIITB_Handshaking'){
+                        script {
+                          dockerImg_frontend=docker.build(imagename_frontend)
+                        }
+                     }
+                }
+        }
+        stage('Push Front End Docker Image') {
             steps {
-            	sh'cd ./Iiitb-Handshake-Backend'
-                sh 'mvn clean install'
+                script{
+                    docker.withRegistry('','docker-jenkins'){
+                        dockerImg_frontend.push()
+                    }
+                }
             }
         }
+        stage('Maven Build') {
+            steps {
+                dir('Iiitb-Handshake-Backend'){
+                    sh 'mvn clean install'
+                }
+            }
+        }
+        stage('Build backend image') {
+                 steps {
+                     dir('Iiitb-Handshake-Backend'){
+                         script {
+                              dockerImg_app=docker.build(imagename_app)
+                            }
+                     }
+                }
+        }
+        stage('Push backend image') {
+           steps {
+                script{
+                    docker.withRegistry('','docker-jenkins'){
+                        dockerImg_app.push()
+                    }
+                }
+            }
+        }
+        stage('Pull Image on Deployment server') {
+            steps {
+                ansiblePlaybook colorized: true, disableHostKeyChecking: true, installation: 'Ansible', inventory: 'inventory',  playbook: 'playbook.yml'
+            }
+        }
+
     }
 }
