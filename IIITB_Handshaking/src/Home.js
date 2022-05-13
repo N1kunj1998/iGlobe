@@ -34,6 +34,7 @@ return (<div>
   
 
   <Col> <StudentHomePage /></Col>
+  <br></br>
   <Col>
   <Card>
     <CardBody >

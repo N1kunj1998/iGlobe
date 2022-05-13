@@ -18,6 +18,7 @@ return(<div>
 
 
 <Col> <StudentHomePage /></Col>
+<br></br>
 <Col>
 <CardBody>
      <Card className="text-center">

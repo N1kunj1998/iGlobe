@@ -62,6 +62,7 @@ function Donate(){
 return(<div>
   <Container/>
   <Col > <StudentHomePage /></Col>
+  <br></br>
  
   
 <Card>

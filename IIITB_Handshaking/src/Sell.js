@@ -63,7 +63,7 @@ return(<div>
   
 
  <Col > <StudentHomePage /></Col>
- 
+ <br></br>
   <Col><Card className='text-center' variant="outlined">
     <CardBody>
     <h8 style={{color: "Blue"}} class="heading">

@@ -1,14 +1,18 @@
 package com.example.IiitbHandshakeBackend.service;
 
+import com.example.IiitbHandshakeBackend.controller.UserController;
 import com.example.IiitbHandshakeBackend.entity.LoginRequest;
 import com.example.IiitbHandshakeBackend.entity.User;
 import com.example.IiitbHandshakeBackend.repo.UserRepo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+    private static final Logger logger = LogManager.getLogger(UserController.class);
     @Autowired
     private UserRepo userRepo;
 
@@ -43,8 +47,10 @@ public class UserService {
         System.out.println(user.getRole().equals(loginRequest.getRole()));
         System.out.println(user.isActive());
         if(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword()) && user.getRole().equals(loginRequest.getRole()) && user.isActive()){
+            logger.info("User" +loginRequest.getUsername() + " Signing Up ");
             return user;
         }
+        logger.error("Invalid User" +loginRequest.getUsername() + " Trying to Signing Up ");
         return null;
     }
 
